@@ -1,0 +1,13 @@
+<script>
+
+</script>
+
+{   view:"layout",
+    type:"line",
+      rows:[
+          { template:"Блокнот", type:"header"},
+          
+          { id:"userNotes", template:"<div id='notes'/>" },          
+          { view: "resizer"}
+      ]
+}

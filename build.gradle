@@ -1,0 +1,146 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'com.bmuschko.cargo'
+apply plugin: 'eclipse'
+
+group = 'ru.simpleweb.gui'
+version = '3'
+
+description = """SimpleWebGui"""
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+
+buildscript {
+
+   repositories {
+      maven { url "$System.env.MVN_REPO" }
+      //maven { url "http://central.maven.org/maven2" }
+      //maven { url "http://repo.maven.apache.org/maven2" }
+   }
+
+   dependencies {
+      classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1'
+      classpath "org.codehaus.cargo:cargo-core-container-glassfish:1.4.5"
+  	}
+}
+
+tasks.withType(JavaCompile) {
+   options.encoding = 'UTF-8'
+}
+
+configurations {
+   provided
+}
+
+sourceSets {
+
+   main.compileClasspath += configurations.provided
+   test.compileClasspath += configurations.provided
+   test.runtimeClasspath += configurations.provided
+
+ 	// Note that just declaring this sourceset creates two configurations.
+   scripts {
+       java {
+      	  srcDir 'src/main/runtime/scripts'
+          compileClasspath += main.compileClasspath
+          compileClasspath += main.output
+          runtimeClasspath += main.output
+       }
+   }
+   
+   test.runtimeClasspath += project.sourceSets.scripts.runtimeClasspath // + files("${projectDir}/test")   
+}
+
+task undeploy(type: Copy) {
+    from "$glassfishHome/glassfish/domains/domain1/config/NOAPP/domain.xml"
+    into "$glassfishHome/glassfish/domains/domain1/config"
+}
+
+undeploy.doFirst{
+    delete "$glassfishHome/glassfish/domains/domain1/applications/ecl"
+    delete "$glassfishHome/glassfish/domains/domain1/generated"
+}
+
+undeploy.doLast{
+    delete "$glassfishHome/glassfish/domains/domain1/applications/ecl"
+    delete "$glassfishHome/glassfish/domains/domain1/generated"
+}
+
+war {
+	//baseName = 'simpleweb'
+   // from 'src/rootContent' // adds a file-set to the root of the archive
+   // webInf { from 'src/additionalWebInf' } // adds a file-set to the WEB-INF dir.
+   // classpath fileTree('tessdata') // adds a file-set to the WEB-INF/lib dir.
+   // classpath configurations.moreLibs // adds a configuration to the WEB-INF/lib dir.
+   // webXml = file('src/someWeb.xml') // copies a file to WEB-INF/web.xml
+}
+
+// gradle cargoRedeployRemote -is  -PcargoPassword=admin
+
+if ( project.hasProperty('cargoPassword')) {
+	cargo {
+	   containerId = 'glassfish4x'
+	   port = 4848
+	
+	   deployable {
+	       context = 'test'
+	   }
+	
+	   remote {
+	       hostname = "localhost"
+	       username = "admin"
+	       password = "$cargoPassword"
+	   }
+	}
+} else {
+	println 'pass cargo password to deploy: -PcargoPassword=XXX'
+}
+
+cargoRedeployRemote.dependsOn assemble
+cargoDeployRemote.dependsOn assemble
+
+repositories {
+
+     maven { url "$System.env.MVN_REPO" }
+     //maven { url "http://central.maven.org/maven2" }
+     //maven { url "http://repo.maven.apache.org/maven2" }
+     //maven { url "http://mirrors.ibiblio.org/pub/mirrors/maven" }
+}
+
+dependencies {
+
+	def cargoVersion = '1.4.5'
+   	cargo   "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+           "org.codehaus.cargo:cargo-ant:$cargoVersion",
+           "org.codehaus.cargo:cargo-core-container-glassfish:$cargoVersion",
+           "org.glassfish.main.deployment:deployment-client:3.1.2"
+
+
+	def springVersion = '4.1.4.RELEASE'
+	
+	compile "org.springframework:spring-jdbc:$springVersion"
+	compile "org.springframework:spring-tx:$springVersion"
+	compile "org.springframework:spring-core:$springVersion"
+	compile "org.springframework:spring-beans:$springVersion"
+	
+	compile 'joda-time:joda-time:2.7'	
+	
+   compile 'com.google.guava:guava:18.0'
+   compile 'com.google.code.gson:gson:2.2.2'
+   compile 'org.json:json:20070829'
+   compile 'commons-io:commons-io:2.4'
+   compile 'commons-lang:commons-lang:2.5'
+   compile 'org.apache.commons:commons-lang3:3.3.2'    
+   compile 'log4j:log4j:1.2.16'
+   compile 'com.github.spullara.mustache.java:compiler:0.8.18'
+
+   testCompile 'junit:junit:4.+'
+   
+
+	// change 'provided' to 'runtime' for importing in eclipse gradle project
+	// after import - change back (and each 'refresh dependencies' action do the same for providied scope) 
+   provided 'javax.persistence:persistence-api:1.0',
+			'javax:javaee-api:7.0'
+}

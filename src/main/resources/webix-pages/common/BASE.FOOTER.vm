@@ -1,0 +1,8 @@
+//////////////////////////////////////////////////
+            ]}
+            , { view:"template",  type:"header", template:"$!app_footer", height: 35 }
+      ]}
+    );
+    </script>
+  </body>
+</html>
