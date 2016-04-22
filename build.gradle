@@ -68,7 +68,12 @@ undeploy.doLast{
     delete "$glassfishHome/glassfish/domains/domain1/generated"
 }
 
+compileJava {
+	dependsOn = [ ':server:web:paylogic-entity-ng:jar']
+}
 war {
+
+	classpath files("../paylogic-entity-ng/build/libs/paylogic-entity-ng.jar")
 	//baseName = 'simpleweb'
    // from 'src/rootContent' // adds a file-set to the root of the archive
    // webInf { from 'src/additionalWebInf' } // adds a file-set to the WEB-INF dir.
@@ -135,9 +140,10 @@ dependencies {
    compile 'org.apache.commons:commons-lang3:3.3.2'    
    compile 'log4j:log4j:1.2.16'
    compile 'com.github.spullara.mustache.java:compiler:0.8.18'
+	
+	providedCompile project(':server:web:paylogic-entity-ng')
 
    testCompile 'junit:junit:4.+'
-   
 
 	// change 'provided' to 'runtime' for importing in eclipse gradle project
 	// after import - change back (and each 'refresh dependencies' action do the same for providied scope) 

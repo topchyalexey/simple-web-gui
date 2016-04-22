@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xm1lns="http://java.sun.com/xml/ns/persistence" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+
+    <persistence-unit name ="testPU">
+         <jta-data-source>jdbc/pg</jta-data-source>
+         <properties>
+             <!--  property name="eclipselink.target-database" value="PostgreSQL"/-->
+         </properties>
+    </persistence-unit>
+    
+    <!-- 
+  <persistence-unit name="testPU" transaction-type="JTA">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>jdbc/pg</jta-data-source>
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.default_schema" value="public"/>
+      <property name="hibernate.jdbc.batch_size" value="20"/>
+      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+      <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.SunONETransactionManagerLookup"/>
+    </properties>
+  </persistence-unit>
+  -->
+  <!-- 
+  
+  	WEB-INF/classes/META-INF/persistence.xml  //good
+	
+	You may also package entity classes and persistence.xml inside a library jar, which is packaged inside the war: WEB-INF/lib
+	WEB-INF/lib/my-entities.jar
+
+	my-entities.jar:
+	META-INF/persistence.xml  //good
+	
+	WEB-INF/persistence.xml  //invalid
+	
+	META-INF/persistence.xml  //invalid	
+   -->
+</persistence>

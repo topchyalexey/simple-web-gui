@@ -1,13 +1,47 @@
 <script>
-
+	var leftMenuData = webix.proxy("cache", "rest/forms/1");
+	// [{ id:"resent",  value:"История задач",        link:"view?page=TASKS.RESENT" }]
+	var forms = webix.proxy("cache", "rest/forms/1");
 </script>
 
 {   view:"layout",
     type:"line",
       rows:[
-          { template:"Блокнот", type:"header"},
+          { template:"", type:"header"},
+          {
+              view : "form",
+              rows : [
+                { view : "text", label : "Email", name : "email" },
+                { view : "button", label : "save" },
+                {
+                  type : "line",
+                  rows : [
+                    { label : "Checkbox", view : "checkbox" },
+                    {
+                      type : "line",
+                      rows : [
+                        { label : "Number", view : "counter" },
+                        {
+                          type : "line",
+                          rows : [
+                            { label : "Label", view : "label" },
+                            {
+                              type : "line",
+                              rows : [
+                                { label : "Date", view : "datepicker" },
+                                { view : "spacer" }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
           
-          { id:"userNotes", template:"<div id='notes'/>" },          
+                    
           { view: "resizer"}
       ]
 }

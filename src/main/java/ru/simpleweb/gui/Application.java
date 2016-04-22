@@ -8,12 +8,14 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.ApplicationPath;
 
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Throwables;
 
-public class Application {
+@ApplicationPath("rest/*")
+public class Application extends javax.ws.rs.core.Application {
 	
 	static final Logger LOG = Logger.getLogger(Application.class);
 

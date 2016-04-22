@@ -20,7 +20,7 @@
 		// <link href="webix/codebase/skins/metro.css" rel="stylesheet" type="text/css">
 		// <link href="webix/codebase/skins/terrace.css" rel="stylesheet" type="text/css">
   		-->
-  		<link href="webix/codebase/skins/clouds.css" rel="stylesheet" type="text/css">
+  		<link href="webix3.2.4/codebase/skins/clouds.css" rel="stylesheet" type="text/css">
   		
   	  <style type="text/css">
 ////////////////////////////////////THIS FORM STYLES ONLY /////////////////////////////////////
@@ -28,7 +28,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////   
   	  </style>
 
-  		<script src='webix/codebase/webix_debug.js' type='text/javascript'></script>
+  		<script src='webix3.2.4/codebase/webix.js' type='text/javascript'></script>
 			  	  <!--
 			  	  // <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 			  	  // <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -98,20 +98,30 @@
 		                  //imageButton("",             "cog" , 		44,   "right",  "view?page=SETTINGS",     "_self")
 		              ]
 		            },  
-		            { cols:[  // working area
-		                     {
-		                       view:"menu",
+		            { cols:[  // working area: Left Menu
+		                      
+		                      {
+                                  url: "rest/forms",
+                                  autoConfig : true,
+		            	          select:true,                                  
+                                  view : "datatable",
+                                  columns : [
+                                    { fillspace : true, template:"#description#" }
+                                  ]
+                              },
+		                     /* {
+	                       	   view:"menu",
 		                       layout:"y",
 		                       select:true,
 		                       type: {
 		                         height: 40
 		                       },
-		                       data:[   
-		                                /*
-		                                { id:"resent",  value:"История задач",        link:"view?page=TASKS.RESENT" },
+		                       data:    
+		                                
+		                                [ { id:"resent",  value:"История задач",        link:"view?page=TASKS.RESENT" },
 		                                { id:"assigned",value:"Мои задачи",           link:"view?page=TASKS.ASSIGNED",        badge:"$!assignedTasksCount" },
-		                                { id:"monitor", value:"Мониторинг процесса",  link:"view?page=BPM.PROCESS.MONITOR" } */
-		                       ],
+		                                { id:"monitor", value:"Мониторинг процесса",  link:"view?page=BPM.PROCESS.MONITOR" } ] 
+		                       ,
 		                       on:{
 		                         onMenuItemClick:function(id){
 		                           window.open(this.getMenuItem(id).link, '_self');
@@ -120,6 +130,7 @@
 		                       width: lowResolution() ? 1 : 300, 
 		                       minWidth:1,
 		                       maxWidth:400
-		                     },
+		                     }, */
+		                     
 		                     {view: "resizer"}, 
 ////////////////////////////////////////////////////////////////////////////////////////////////
