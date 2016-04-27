@@ -62,9 +62,7 @@ public class FileUploadServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			new JSONWriter(out).object().key("status").value("error").key("details").value(Throwables.getStackTraceAsString(ex)).endObject();
 			Closeables.close(out, true);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (JSONException e) {
+		} catch (IOException|JSONException e) {
 			throw new RuntimeException(e);
 		}
 

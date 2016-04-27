@@ -45,6 +45,7 @@ public class Application extends javax.ws.rs.core.Application {
 
 	public static class PROPS {
 
+		static Map<String, String> props = Application.loadMap("app.properties");
 		static String appURL;
 
 		public static void initWithHttpRequest(HttpServletRequest request) {
@@ -56,6 +57,14 @@ public class Application extends javax.ws.rs.core.Application {
 
 		public static String getAppBaseUrl() {
 			return appURL;
+		}
+
+		public static Map<String, String> getAll() {
+			return props;
+		}
+
+		public static String get(String key) {
+			return props.get(key);
 		}
 	}
 

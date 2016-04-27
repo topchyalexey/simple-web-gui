@@ -1,14 +1,12 @@
 package ru.simpleweb.gui.payments.boundary;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,11 +16,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-
+import ru.simpleweb.gui.payments.model.Field;
 import ru.simpleweb.gui.payments.model.Form;
-import ru.softlogic.server.entity.processing.Service;
 
 @Stateless
 @Path("/forms")
@@ -48,7 +45,15 @@ public class FormListService {
     @Path("{id}")
     public Form read(@PathParam("id") int id) {
         return em.find(Form.class, id);
-     }
+    }
+
+	@GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/fieldsFor/{id}")
+    public Collection<Field> fieldsFor(@PathParam("id") int id) {
+		return read(id).fields();
+		// return Response.ok().entity(read(id).fields()).build();
+    }
     
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)

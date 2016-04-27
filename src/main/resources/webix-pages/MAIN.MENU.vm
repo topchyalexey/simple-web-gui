@@ -1,47 +1,114 @@
 <script>
-	var leftMenuData = webix.proxy("cache", "rest/forms/1");
-	// [{ id:"resent",  value:"История задач",        link:"view?page=TASKS.RESENT" }]
-	var forms = webix.proxy("cache", "rest/forms/1");
+
+	function getFieldsData() {
+		var data = [];
+		var dv = $$('dataView');
+		dv.eachRow( 
+		    function (row){
+		    	var i = dv.getItem(row);
+		        data.push(i);
+		    }
+		);
+		return data;
+	}
+	
+    function parseResponse(text){  //response
+		$$("response").setValue(//JSON.parse(
+				text// )
+				);
+    }
+	
+    var form = { type:"wide",
+    			rows: [
+		                { view:"textarea",  name:"response",  id:"response", readonly:true, height: 83 },
+		                { view:"text",  label: "Id Сервиса", id: "serviceId",  name:"service"   },
+		                { view:"text",  label: "Id Точки", id: "pointId",  name:"point"      	},
+		                { view:"text",  label: "Id Провайдера", id: "providerId",  name:"provider" },
+		                { view:"button", label:"Отправить",  click:"sendPayment()" }	                
+		                ]};
+    /*
+    webix.attachEvent("onBeforeAjax", function(mode, url, data, request, headers){
+  	  headers["Content-type"] = "application/json";
+  	}); */
+  	
+    function sendPayment() {
+		var item = $$("leftMenu").getSelectedItem(false);
+	    var formData = { 
+	    		fields: getFieldsData(),
+		  		service: $$("serviceId").getValue(),
+		  		point: $$("pointId").getValue(), 
+		  		provider: $$("providerId").getValue(),
+		  		form: item.id
+			};
+	    
+		webix.ajax().post("rest/payment/do", //saving form
+					formData,
+					parseResponse
+	        );
+	}
+
+	function webixReady() {
+		
+
+	    
+		var data = { type:"wide", 
+						rows: [
+		                  	{  id: "dataView",	  
+						  	  view : "datatable",
+					          autoConfig : true,
+						      select:false,
+						      editable: true,
+						      columns : [
+								          { id: "code", header: "Код", fillspace : true },
+								          { id: "type", header: "Тип", fillspace : true },
+								          { id: "description", header: "Описание", fillspace : true },
+								          { id: "value", fillspace : true, editor:"text", header: "Значение" }
+						      ],
+					    	},
+					    	form
+				   ] };
+		
+		$$("centerLayout").addView( 
+			{ 	id: "leftMenu",
+		  	  	view : "datatable",
+		        url: "rest/forms",
+		        autoConfig : true,
+		        select:true,                                  
+		        columns : [
+		          { id: "funcCode", fillspace : true },
+		          { id: "description", fillspace : true },
+		          { id: "service", fillspace : true }
+		        ],
+		        /*
+      columns:[
+        {id:"id", header: { text:"#", height: tabHeaderH } , width:40 },
+
+        {id:"code", header:"Код/Cкрипт", template: "<span>#alg#/<strong>#cls#</strong></span>",  width:400 },
+        {id:"transition", header:"Перешли сюда с... по условию...", template: "<span>#parent#/<strong>#transition#</strong></span>", width:200},
+        {id:"dateEnd", header:"Дата завершения" , sort:"date", format:webix.i18n.dateFormatStr, width:100},
+        {id:"widow", header:"Окно", width:100},
+        {id:"action", header:"Действия", width:100, template: "<input type='button' value='Открыть' class='webixbutton'>" }
+ 		{id:"type", 	header: "Тип", 			#if ("$!RECOGNIZE"!="true") editor:"combo", #end collection: types, width:100 },
+		{id:"value", 	header: "Значение", editor:"text", fillspace:true, width:100 }         
+      ],		          
+		         */
+		        on: {
+		      	     onSelectChange: function () {
+		      	       var item = $$("leftMenu").getSelectedItem(false);
+		      	       //webix.message( "Id: " + item.id);
+		      	       $$("dataView").define("url", "rest/forms/fieldsFor/" + item.id ); 
+		      	     }
+		      	  }
+   /*		       ,onClick:{
+		              "webixbutton":function(e, id){
+		                //webix.message("view?actionId=" + id);
+		                window.location = "view?actionId=" + id;
+		              }
+		            } */		      	  
+		    }, 0);
+		
+		$$("centerLayout").addView(data, 1);
+	}
 </script>
 
-{   view:"layout",
-    type:"line",
-      rows:[
-          { template:"", type:"header"},
-          {
-              view : "form",
-              rows : [
-                { view : "text", label : "Email", name : "email" },
-                { view : "button", label : "save" },
-                {
-                  type : "line",
-                  rows : [
-                    { label : "Checkbox", view : "checkbox" },
-                    {
-                      type : "line",
-                      rows : [
-                        { label : "Number", view : "counter" },
-                        {
-                          type : "line",
-                          rows : [
-                            { label : "Label", view : "label" },
-                            {
-                              type : "line",
-                              rows : [
-                                { label : "Date", view : "datepicker" },
-                                { view : "spacer" }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-          
-                    
-          { view: "resizer"}
-      ]
-}
+{}

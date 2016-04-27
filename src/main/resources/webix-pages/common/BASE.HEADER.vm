@@ -98,17 +98,9 @@
 		                  //imageButton("",             "cog" , 		44,   "right",  "view?page=SETTINGS",     "_self")
 		              ]
 		            },  
-		            { cols:[  // working area: Left Menu
+		            {  id:"centerLayout", 
+		            	cols:[  // working area: Left Menu
 		                      
-		                      {
-                                  url: "rest/forms",
-                                  autoConfig : true,
-		            	          select:true,                                  
-                                  view : "datatable",
-                                  columns : [
-                                    { fillspace : true, template:"#description#" }
-                                  ]
-                              },
 		                     /* {
 	                       	   view:"menu",
 		                       layout:"y",

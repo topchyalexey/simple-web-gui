@@ -3,9 +3,7 @@ package ru.simpleweb.gui.service.http;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +29,7 @@ public class DynamicPages {
 
 	public static class LAZY {
 
-		private static final Map<String, String> APP_CONSTANTS = Application.loadMap("app.properties");
+		private static final Map<String, String> APP_CONSTANTS = Application.PROPS.getAll();
 		public static final Map<String, Object> VISUAL_FORM_CONSTANTS = new MapBuilder<String, Object>()
 				.put("app_header", APP_CONSTANTS.get("HEADER"))
 				.put("app_footer", APP_CONSTANTS.get("FOOTER") + " / Powered by " + System.getProperty("java.version"))

@@ -69,11 +69,12 @@ undeploy.doLast{
 }
 
 compileJava {
-	dependsOn = [ ':server:web:paylogic-entity-ng:jar']
+	dependsOn = [ ':server:web:paylogic-entity-ng:jar', ':gates:core:remote:jar']
 }
 war {
 
-	classpath files("../paylogic-entity-ng/build/libs/paylogic-entity-ng.jar")
+	classpath files("../web/paylogic-entity-ng/build/libs/paylogic-entity-ng.jar")
+	classpath files("../../gates/core/remote/build/libs/remote.jar")	
 	//baseName = 'simpleweb'
    // from 'src/rootContent' // adds a file-set to the root of the archive
    // webInf { from 'src/additionalWebInf' } // adds a file-set to the WEB-INF dir.
@@ -131,22 +132,22 @@ dependencies {
 	compile "org.springframework:spring-beans:$springVersion"
 	
 	compile 'joda-time:joda-time:2.7'	
-	
-   compile 'com.google.guava:guava:18.0'
-   compile 'com.google.code.gson:gson:2.2.2'
-   compile 'org.json:json:20070829'
-   compile 'commons-io:commons-io:2.4'
-   compile 'commons-lang:commons-lang:2.5'
-   compile 'org.apache.commons:commons-lang3:3.3.2'    
-   compile 'log4j:log4j:1.2.16'
-   compile 'com.github.spullara.mustache.java:compiler:0.8.18'
+   	compile 'com.google.guava:guava:18.0'
+   	compile 'com.google.code.gson:gson:2.2.2'
+   	compile 'org.json:json:20070829'
+   	compile 'commons-io:commons-io:2.4'
+   	compile 'commons-lang:commons-lang:2.5'
+   	compile 'org.apache.commons:commons-lang3:3.3.2'    
+   	compile 'log4j:log4j:1.2.16'
+   	compile 'com.github.spullara.mustache.java:compiler:0.8.18'
 	
 	providedCompile project(':server:web:paylogic-entity-ng')
+	providedCompile project(':gates:core:remote')
 
-   testCompile 'junit:junit:4.+'
+   	testCompile 'junit:junit:4.+'
 
 	// change 'provided' to 'runtime' for importing in eclipse gradle project
 	// after import - change back (and each 'refresh dependencies' action do the same for providied scope) 
-   provided 'javax.persistence:persistence-api:1.0',
+   	provided 'javax.persistence:persistence-api:1.0',
 			'javax:javaee-api:7.0'
 }
