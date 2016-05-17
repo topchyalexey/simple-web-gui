@@ -47,6 +47,15 @@ public class FormListService {
         return em.find(Form.class, id);
     }
 
+/*  // Get with query params, e.g.  app/rest/payment/do?query=aa&granularity=1
+@GET
+@Produces({MediaType.APPLICATION_JSON})
+@Path("/xml/search")
+public Object searchXML(@QueryParam("query") String query,
+        @QueryParam("granularity") String granularity) {
+    return search(query, granularity);
+}
+*/
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/fieldsFor/{id}")
